@@ -1,0 +1,3 @@
+# Vacuum Q5
+
+1600W bagless vacuum cleaner with cyclonic filtration, 2.0L dust container, HEPA H13 filter, 8m power cord, and accessories for crevices and upholstery. Noise level 74 dB.

@@ -1,0 +1,3 @@
+# Mixer Mini
+
+300W hand mixer with 5 speeds and turbo button, includes stainless steel beaters and dough hooks. Lightweight body for one-hand operation.
