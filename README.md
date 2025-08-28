@@ -274,7 +274,7 @@ docker inspect rag-tech | jq -r '.[0].Architecture'
 - **Input Validation**: Pydantic models prevent injection attacks
 - **Rate Limiting**: Configurable per-user quotas
 - **CORS**: Restricted origins for production deployments
-- **Secrets Management**: Environment-based configuration
+
 
 ## 📈 Future Enhancements
 
@@ -288,22 +288,10 @@ docker inspect rag-tech | jq -r '.[0].Architecture'
 - [ ] Federated search across multiple knowledge bases
 - [ ] Auto-scaling based on query volume
 
-## 🤝 Contributing
-
-This codebase follows enterprise-grade standards:
-
-1. **Code Style**: Black formatting, isort imports
-2. **Type Safety**: mypy static analysis
-3. **Testing**: pytest with 80%+ coverage requirement
-4. **Documentation**: Google-style docstrings
-5. **Git Flow**: Feature branches with PR reviews
-
 ## 📄 License
 
-MIT License - see LICENSE file for details.
+All rights reserved. 
 
 ---
-
-**Built with ❤️ for production-grade RAG applications**
 
 *This implementation demonstrates advanced software engineering practices including clean architecture, multi-agent design patterns, performance optimization, and production readiness considerations.*
