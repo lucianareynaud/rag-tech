@@ -30,12 +30,55 @@ readonly PY=${PYTHON:-python3}
 readonly PORT=${PORT:-8000}
 readonly HOST=${HOST:-0.0.0.0}
 
+# Ensure ARM64 native execution on Apple Silicon
+export DOCKER_DEFAULT_PLATFORM=linux/arm64
+export ARCHFLAGS="-arch arm64"
+
 
 # =============================================================================
 # Helper Functions
 # =============================================================================
 check_command() {
     command -v "$1" >/dev/null 2>&1 || error "Command '$1' not found. Please install it first."
+}
+
+cleanup_port() {
+    local port="$1"
+    local pids=$(lsof -ti:$port 2>/dev/null)
+    
+    if [ -n "$pids" ]; then
+        log "Cleaning up processes on port $port..."
+        echo "$pids" | xargs kill -TERM 2>/dev/null || true
+        sleep 2
+        
+        # Force kill if still running
+        local remaining=$(lsof -ti:$port 2>/dev/null)
+        if [ -n "$remaining" ]; then
+            echo "$remaining" | xargs kill -KILL 2>/dev/null || true
+            sleep 1
+        fi
+        success "Port $port cleaned up"
+    fi
+}
+
+ensure_arm64() {
+    # Check if we're on Apple Silicon
+    if [[ "$(uname -m)" == "arm64" ]]; then
+        log "Detected Apple Silicon - optimizing for ARM64..."
+        
+        # Force pip to prefer ARM64 wheels
+        export _PIP_LOCATIONS_NO_WARN_ON_MISMATCH=1
+        export CMAKE_OSX_ARCHITECTURES=arm64
+        
+        # Check Python architecture
+        local py_arch=$($PY -c "import platform; print(platform.machine())")
+        if [[ "$py_arch" != "arm64" ]]; then
+            warning "Python is running as $py_arch (not arm64) - this may cause x86 emulation"
+            warning "Consider installing Python ARM64 natively: brew install python@3.11"
+        else
+            success "Python running natively on ARM64"
+        fi
+    fi
 }
 
 # =============================================================================
@@ -57,11 +100,17 @@ EOF
     echo "⚡ Automatic setup starting..."
     echo ""
 
-    # Step 1: Check dependencies
+    # Step 1: System optimization and cleanup
     log "Checking system dependencies..."
     check_command "$PY"
     check_command "curl"
     success "Dependencies OK"
+    
+    # Ensure ARM64 optimization
+    ensure_arm64
+    
+    # Clean up any existing processes on our port
+    cleanup_port "$PORT"
 
     # Step 2: Python environment
     log "Setting up Python environment..."
@@ -138,7 +187,7 @@ print(f'   LLM Status: {llm.provider} mode ready')
     echo -e "${GREEN}🚀 RAG SYSTEM READY!${NC}"
     echo ""
     echo "📊 Final configuration:"
-    echo "   • 🤖 IBM Granite 3.1 MoE 1B via Ollama"
+    echo "   • 🤖 IBM Granite 3.1 MoE 1B via Ollama (ARM64 native)"
     echo "   • 🧠 FastEmbed multilingual"
     echo "   • 📚 6 products indexed"
     echo "   • ⚡ 100% local, zero cost"
@@ -152,6 +201,10 @@ print(f'   LLM Status: {llm.provider} mode ready')
     echo "   📖 API Docs: http://localhost:$PORT/docs"
     echo "   🧪 cURL: curl -X POST http://localhost:$PORT/query -H 'Content-Type: application/json' -d '{\"query\":\"Z-123 capacity?\"}'"
     echo ""
+    echo "🛠️  Troubleshooting:"
+    echo "   If port conflict: pkill -f uvicorn && ./start.sh"
+    echo "   To stop: Ctrl+C or pkill -f 'rag-tech|uvicorn'"
+    echo ""
     log "Starting FastAPI server..."
     echo "   (Press Ctrl+C to stop)"
     echo ""
@@ -159,6 +212,16 @@ print(f'   LLM Status: {llm.provider} mode ready')
     # Start the API
     exec uvicorn app.main:app --host "$HOST" --port "$PORT" --log-level info
 }
+
+# =============================================================================
+# Cleanup on exit
+# =============================================================================
+cleanup() {
+    if [ -n "${API_PID:-}" ]; then
+        kill "$API_PID" 2>/dev/null || true
+    fi
+}
+trap cleanup EXIT INT TERM
 
 # =============================================================================
 # Run
