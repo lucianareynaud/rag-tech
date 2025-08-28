@@ -6,16 +6,17 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
+# System dependencies for onnxruntime
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential git curl ca-certificates && \
+    build-essential curl ca-certificates libgomp1 && \
     rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Build vector index at image build time
+# Build vector index at build time
 RUN python -m scripts.ingest
 
 EXPOSE 8000

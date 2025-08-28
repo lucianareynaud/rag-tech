@@ -1,0 +1,22 @@
+# context slim
+.git
+.gitignore
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.swp
+.venv
+.env
+.env.*
+.cache
+dist
+build
+node_modules
+*.log
+# artifacts
+storage/
+# IDE
+.vscode
+.idea
+.DS_Store

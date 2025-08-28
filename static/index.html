@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Query Bot • rag-tech</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="bot-avatar">🤖</div>
+                <div class="header-info">
+                    <h1>Product Query Bot</h1>
+                    <div class="status" id="status">
+                        <span class="status-dot"></span>
+                        <span>RAG Pipeline Ready</span>
+                    </div>
+                </div>
+                <div class="tech-badge">
+                    <span>rag-tech</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Chat Container -->
+        <main class="chat-container">
+            <div class="messages" id="messages">
+                <!-- Welcome message -->
+                <div class="message bot-message">
+                    <div class="message-content">
+                        <div class="message-text">
+                            👋 Hello! I'm your product assistant.<br>
+                            Ask me about our blenders, kettles, vacuums, and more!
+                        </div>
+                        <div class="message-meta">
+                            <span class="message-time">Now</span>
+                            <span class="pipeline-info">🔄 2-Agent LangGraph</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-container">
+                <form class="input-form" id="messageForm">
+                    <div class="input-wrapper">
+                        <input 
+                            type="text" 
+                            id="messageInput" 
+                            placeholder="Ask about our products..."
+                            autocomplete="off"
+                            maxlength="500"
+                        >
+                        <button type="submit" id="sendButton" class="send-button">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        <!-- Sources Panel -->
+        <aside class="sources-panel" id="sourcesPanel">
+            <div class="sources-header">
+                <h3>📚 Sources Consulted</h3>
+                <button class="close-sources" id="closeSources">×</button>
+            </div>
+            <div class="sources-content" id="sourcesContent">
+                <p class="sources-placeholder">Sources will appear here after a query.</p>
+            </div>
+        </aside>
+
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <div class="loading-steps">
+                    <div class="step active" id="step1">🔍 Retriever Agent</div>
+                    <div class="step" id="step2">🤖 Responder Agent</div>
+                    <div class="step" id="step3">✨ Generating...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
