@@ -9,13 +9,8 @@ class Settings(BaseSettings):
     MODEL: str = "granite3.1-moe:1b"
     EMBEDDING_MODEL: str = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
     
-    # LLM provider configuration
-    LLM_PROVIDER: str = "ollama"  # "openai", "ollama", or "stub"
+    # Ollama configuration
     OLLAMA_BASE_URL: str = "http://localhost:11434"
-    
-    # Optional OpenAI configuration (override via environment if needed)
-    OPENAI_API_KEY: str | None = None
-    OPENAI_BASE_URL: str | None = None
 
     model_config = SettingsConfigDict(extra="ignore")
 

@@ -49,11 +49,11 @@ graph TB
     %% Agent Pipeline Layer
     Pipeline[🔄 LangGraph Pipeline]
     RA[🔍 Retriever Agent<br/>Semantic Search]
-    RespA[🤖 Responder Agent<br/>LLM Generation]
+    RespA[🤖 Responder Agent<br/>Granite Generation]
     
     %% Core Services Layer
     Retriever[📊 Retriever Service<br/>FastEmbed + NumPy Cosine]
-    LLM[🧠 LLM Service<br/>Granite 3.1 MoE 1B]
+    LLM[🧠 LLM Service<br/>Pure Ollama Integration]
     
     %% Data Layer
     VectorStore[🗂️ Vector Store<br/>storage/index.npz]
@@ -61,7 +61,7 @@ graph TB
     Corpus[📚 Document Corpus<br/>data/products/]
     
     %% External Tools
-    Ollama[🦙 Ollama Server<br/>localhost:11434]
+    Ollama[🦙 Ollama Server<br/>Granite 3.1 MoE 1B<br/>localhost:11434]
     
     %% Flow connections
     UI --> API
@@ -132,7 +132,7 @@ This architecture provides:
 - **FastAPI**: Industry standard for Python APIs, excellent OpenAPI docs
 - **LangGraph**: Explicit agent orchestration vs implicit chains
 - **Pydantic**: Type safety and validation at API boundaries
-- **Ollama**: Battle-tested local LLM serving with robust model management
+- **Ollama**: Dedicated local LLM serving optimized for Granite 3.1 MoE 1B
 
 ### Engineering Excellence
 
@@ -198,19 +198,74 @@ pytest tests/ -v  # Unit tests with 80%+ coverage
 
 ## 🧪 Testing & Validation
 
+### Unit Tests
 ```bash
-# Unit tests
 pytest tests/ -v
+```
 
-# Integration test
+### API Examples & Integration Tests
+
+Start the server first:
+```bash
+./start.sh
+```
+
+**Example 1: Product Capacity Query**
+```bash
 curl -X POST http://localhost:8000/query \
   -H 'Content-Type: application/json' \
   -d '{"query": "What is the capacity of Z-123 blender jar?"}'
+```
 
-# Performance test
+**Example 2: Safety Features**
+```bash
+curl -X POST http://localhost:8000/query \
+  -H 'Content-Type: application/json' \
+  -d '{"query": "Is Z-123 dishwasher safe?"}'
+```
+
+**Example 3: Product Comparison**
+```bash
+curl -X POST http://localhost:8000/query \
+  -H 'Content-Type: application/json' \
+  -d '{"query": "Compare Kettle-Pro vs Mixer-Mini features"}'
+```
+
+**Example 4: Technical Specifications**
+```bash
+curl -X POST http://localhost:8000/query \
+  -H 'Content-Type: application/json' \
+  -d '{"query": "What are the motor specifications for X-200 toaster?"}'
+```
+
+**Performance Testing**
+```bash
+# Measure response time
 time curl -X POST http://localhost:8000/query \
   -H 'Content-Type: application/json' \
-  -d '{"query": "Is Z-123 dishwasher safe?"}' | jq .meta.latency_ms
+  -d '{"query": "Vacuum Q5 suction power"}' | jq .meta.latency_ms
+
+# Health check
+curl http://localhost:8000/health
+```
+
+**Expected Response Format:**
+```json
+{
+  "answer": "The Z-123 blender has a 1.5L capacity jar made from BPA-free materials...",
+  "sources": [
+    {
+      "doc_id": "Z-123.md",
+      "text": "Blender Z-123 features: 1.5L BPA-free jar...",
+      "score": 0.847
+    }
+  ],
+  "meta": {
+    "top_k": 3,
+    "threshold": 0.4,
+    "latency_ms": 28
+  }
+}
 ```
 
 ## 🔧 Development
@@ -259,9 +314,9 @@ docker inspect rag-tech | jq -r '.[0].Architecture'
 - `Indexer` class handles document ingestion
 - Clean separation between storage and business logic
 
-### 2. Strategy Pattern
-- `LLM` class supports multiple providers (stub, ollama, OpenAI)
-- Runtime provider switching via environment variables
+### 2. Single Provider Pattern
+- `LLM` class optimized for Ollama + Granite 3.1 MoE 1B
+- Simplified architecture without provider switching complexity
 
 ### 3. Factory Pattern
 - Settings configuration with sensible defaults

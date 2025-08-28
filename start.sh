@@ -172,13 +172,13 @@ from app.llm import LLM
 import os
 
 # Check configuration
-print(f'   LLM: {settings.LLM_PROVIDER} ({settings.MODEL})')
+print(f'   LLM: ollama ({settings.MODEL})')
 print(f'   Embedding: FastEmbed ready')
 print(f'   Index: {\"OK\" if os.path.exists(\"storage/index.npz\") else \"Missing\"}')
 
 # Test LLM
 llm = LLM()
-print(f'   LLM Status: {llm.provider} mode ready')
+print(f'   LLM Status: ollama mode ready')
 "
     success "System validated and ready"
 
