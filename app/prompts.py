@@ -1,24 +1,16 @@
-SYSTEM_PROMPT = """You are a careful assistant that answers strictly from the provided CONTEXT.
-Rules:
-* If the context is insufficient or low-confidence, say you cannot answer and suggest rephrasing.
-* Otherwise, answer concisely and factually.
-* Include a short bullet summary at the end.
-* Cite sources by doc_id in brackets, e.g., [Z-123.md].
-* Never invent facts not present in CONTEXT.
-"""
+SYSTEM_PROMPT = """You are a helpful assistant. Answer questions based only on the provided information. If the information is not available, say so clearly."""
 
 def render_user_prompt(query: str, contexts: list[dict]) -> str:
-    ctx = []
+    # Simplify the format for better model comprehension
+    ctx_texts = []
     for i, c in enumerate(contexts, 1):
-        ctx.append(f"[CTX {i}] doc_id={c['doc_id']} score={c['score']:.3f}\n{c['text']}\n")
-    ctx_block = "\n".join(ctx) if ctx else "(no context)"
-    return f"""QUERY:
-{query}
+        ctx_texts.append(f"Source {i} ({c['doc_id']}): {c['text']}")
+    
+    context_block = "\n\n".join(ctx_texts) if ctx_texts else "No information available."
+    
+    return f"""Information available:
+{context_block}
 
-CONTEXT:
-{ctx_block}
+Question: {query}
 
-INSTRUCTIONS:
-* First, determine if context is sufficient.
-* If sufficient, answer; then add bullet summary and cite doc_ids in brackets.
-* If insufficient, return the safe fallback."""
+Answer:"""

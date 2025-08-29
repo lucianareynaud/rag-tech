@@ -3,7 +3,7 @@ import os, json, logging, random
 from dataclasses import dataclass
 from typing import List, Dict
 import numpy as np
-from fastembed import TextEmbedding
+from sentence_transformers import SentenceTransformer
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("rag")
@@ -33,19 +33,25 @@ def _l2_normalize(mat: np.ndarray) -> np.ndarray:
 
 class _Embedder:
     def __init__(self, model_name: str):
-        self.model = TextEmbedding(model_name=model_name)
+        logger.info(f"Loading embedding model: {model_name}")
+        self.model = SentenceTransformer(model_name)
+        logger.info("Embedding model loaded successfully")
 
-    def encode(self, texts: List[str]) -> np.ndarray:
-        # FastEmbed retorna um iterável de listas; convertendo para np.array float32
-        vecs = list(self.model.embed(texts))
-        arr = np.asarray(vecs, dtype="float32")
-        return _l2_normalize(arr)
+    def encode(self, texts: List[str], is_query: bool = False) -> np.ndarray:
+        # For E5 models, adding appropriate prefixes improves performance
+        if is_query:
+            prefixed_texts = [f"query: {text}" for text in texts]
+        else:
+            prefixed_texts = [f"passage: {text}" for text in texts]
+        
+        vecs = self.model.encode(prefixed_texts, convert_to_numpy=True, normalize_embeddings=True)
+        return vecs.astype("float32")
 
 class Indexer:
     """
-    Constrói um índice leve:
-      - storage/index.npz : matriz [N,D] (vetores L2-normalizados, float32)
-      - storage/meta.json : lista [{doc_id, text}]
+    Builds a lightweight index:
+      - storage/index.npz : matrix [N,D] (L2-normalized vectors, float32)
+      - storage/meta.json : list [{doc_id, text}]
     """
     def __init__(self, embedding_model: str):
         self.embedder = _Embedder(embedding_model)
@@ -65,7 +71,7 @@ class Indexer:
             raise RuntimeError("No texts found to index.")
 
         texts = [c.text for c in chunks]
-        vecs = self.embedder.encode(texts)  # [N,D] L2-normalizado
+        vecs = self.embedder.encode(texts)  # [N,D] already normalized by sentence-transformers
 
         np.savez_compressed(os.path.join(storage_dir, "index.npz"), vectors=vecs)
         meta = [{"doc_id": c.doc_id, "text": c.text} for c in chunks]
@@ -76,7 +82,7 @@ class Indexer:
 
 class Retriever:
     """
-    Busca por cosseno em NumPy (dot product, pois os vetores já estão L2-normalizados).
+    Cosine search in NumPy (dot product, since vectors are already L2-normalized).
     """
     def __init__(self, embedding_model: str, storage_dir: str, top_k: int = 3):
         self.embedder = _Embedder(embedding_model)
@@ -84,18 +90,18 @@ class Retriever:
         meta_path = os.path.join(storage_dir, "meta.json")
         if not (os.path.isfile(idx_path) and os.path.isfile(meta_path)):
             raise RuntimeError("Index not found. Run `python -m scripts.ingest`.")
-        self.vectors = np.load(idx_path)["vectors"].astype("float32")  # [N,D], L2-normalized
+        self.vectors = np.load(idx_path)["vectors"].astype("float32")  # [N,D], normalized
         with open(meta_path, "r", encoding="utf-8") as f:
             self.meta = json.load(f)
         self.top_k = top_k
 
     def search(self, query: str, k: int | None = None) -> List[Dict]:
         k = k or self.top_k
-        q_vec = self.embedder.encode([query])[0]  # [D], L2-normalized
-        # Similaridade por cosseno = produto interno (já normalizado)
+        q_vec = self.embedder.encode([query], is_query=True)[0]  # [D], normalized
+        # Cosine similarity = dot product (already normalized)
         scores = self.vectors @ q_vec  # [N]
         idxs = np.argpartition(-scores, kth=min(k, len(scores)-1))[:k]
-        # Ordenação estável por (-score, doc_id)
+        # Stable sorting by (-score, doc_id)
         pairs = sorted(
             ((float(scores[i]), i) for i in idxs),
             key=lambda x: (-x[0], self.meta[x[1]]["doc_id"])

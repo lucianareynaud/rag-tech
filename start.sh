@@ -4,11 +4,11 @@ set -euo pipefail
 # =============================================================================
 # rag-tech - Single-Command Startup Script
 # =============================================================================
-# Recrutador: rode apenas "./start.sh" e toda a mágica acontece!
-# - Setup automático do ambiente Python
-# - Download do modelo Granite 1B (~600MB)
-# - Indexação do corpus com FastEmbed
-# - API RAG pronta em http://localhost:8000
+# Developer: just run "./start.sh" and everything works automatically!
+# - Automatic Python environment setup
+# - Download Granite 1B model (~600MB)
+# - Index corpus with Sentence-Transformers
+# - RAG API ready at http://localhost:8000
 # =============================================================================
 
 readonly RED='\033[0;31m'
@@ -94,7 +94,7 @@ main() {
     ██║  ██║██║  ██║╚██████╔╝         ██║   ███████╗╚██████╗██║  ██║
     ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝          ╚═╝   ╚══════╝ ╚═════╝╚═╝  ╚═╝
     
-    🤖 RAG System with IBM Granite 3.1 + FastEmbed + LangGraph
+    🤖 RAG System with IBM Granite 3.1 + Sentence-Transformers + LangGraph
 EOF
     echo -e "${NC}"
     echo "⚡ Automatic setup starting..."
@@ -123,8 +123,7 @@ EOF
 
     source .venv/bin/activate
     
-    # Upgrade pip and install dependencies
-    pip install -U pip wheel >/dev/null 2>&1
+    # Install dependencies (skip pip upgrade for speed)
     pip install -r requirements.txt >/dev/null 2>&1
     success "Python dependencies installed"
 
@@ -156,7 +155,7 @@ EOF
     fi
 
     # Step 5: Build vector index
-    log "Building vector index with FastEmbed..."
+    log "Building vector index with Sentence-Transformers..."
     if [ ! -f "storage/index.npz" ] || [ ! -f "storage/meta.json" ]; then
         python -m scripts.ingest >/dev/null 2>&1
         success "Vector index built"
@@ -173,7 +172,7 @@ import os
 
 # Check configuration
 print(f'   LLM: ollama ({settings.MODEL})')
-print(f'   Embedding: FastEmbed ready')
+print(f'   Embedding: E5 multilingual ready')
 print(f'   Index: {\"OK\" if os.path.exists(\"storage/index.npz\") else \"Missing\"}')
 
 # Test LLM
@@ -188,7 +187,7 @@ print(f'   LLM Status: ollama mode ready')
     echo ""
     echo "📊 Final configuration:"
     echo "   • 🤖 IBM Granite 3.1 MoE 1B via Ollama (ARM64 native)"
-    echo "   • 🧠 FastEmbed multilingual"
+    echo "   • 🧠 E5 multilingual embeddings"
     echo "   • 📚 6 products indexed"
     echo "   • ⚡ 100% local, zero cost"
     echo "   • 💬 WhatsApp-style frontend: http://localhost:$PORT"

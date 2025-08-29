@@ -43,7 +43,7 @@ def responder_agent(state: GraphState) -> GraphState:
     user_prompt = render_user_prompt(state["query"], hits)
     answer = llm.generate(SYSTEM_PROMPT, user_prompt)
     state["answer"] = answer
-    state["sources"] = [{"doc_id": h["doc_id"], "score": round(h["score"], 3)} for h in hits]
+    state["sources"] = [{"doc_id": h["doc_id"], "score": round(h["score"], 3), "text": h["text"]} for h in hits]
     return state
 
 def build_graph():

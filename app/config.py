@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     
     # Model configuration
     MODEL: str = "granite3.1-moe:1b"
-    EMBEDDING_MODEL: str = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+    EMBEDDING_MODEL: str = "intfloat/multilingual-e5-small"
     
     # Ollama configuration
     OLLAMA_BASE_URL: str = "http://localhost:11434"

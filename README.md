@@ -17,7 +17,7 @@ A sophisticated yet minimalist Retrieval-Augmented Generation system implementin
 - ✅ Setup Python environment
 - ✅ Start Ollama server
 - ✅ Download Granite 3.1 MoE 1B model (~1.4GB)
-- ✅ Build vector index with FastEmbed
+- ✅ Build vector index with Sentence-Transformers
 - ✅ Launch RAG API at http://localhost:8000
 - ✅ Serve WhatsApp-style UI
 
@@ -52,7 +52,7 @@ graph TB
     RespA[🤖 Responder Agent<br/>Granite Generation]
     
     %% Core Services Layer
-    Retriever[📊 Retriever Service<br/>FastEmbed + NumPy Cosine]
+    Retriever[📊 Retriever Service<br/>E5 Embeddings + NumPy Cosine]
     LLM[🧠 LLM Service<br/>Pure Ollama Integration]
     
     %% Data Layer
@@ -119,14 +119,15 @@ This architecture provides:
 - **Quality**: Latest Granite architecture with instruction-following optimization
 - **Stability**: Ollama provides robust model management and serving
 
-#### Vector Store: FastEmbed + NumPy
-**Decision**: Replaced FAISS with FastEmbed + NumPy cosine similarity  
+#### Vector Store: Sentence-Transformers + E5 + NumPy
+**Decision**: Sentence-Transformers with intfloat/multilingual-e5-small + NumPy cosine similarity  
 **Rationale**:
-- **Simplicity**: No native dependencies (SWIG, C++ compilers)
-- **Performance**: NumPy vectorized operations are sufficient for small datasets
-- **Memory**: L2-normalized vectors enable dot product = cosine similarity
+- **Quality**: E5 models specifically optimized for retrieval tasks
+- **Performance**: State-of-the-art multilingual embeddings with proper query/passage prefixes
+- **Simplicity**: No native dependencies, pure Python stack
+- **Memory**: Normalized vectors enable dot product = cosine similarity
 - **Determinism**: Stable sorting with doc_id tie-breaking ensures reproducible results
-- **Portability**: Pure Python stack works everywhere
+- **Portability**: Works across all platforms and architectures
 
 #### Framework Choices
 - **FastAPI**: Industry standard for Python APIs, excellent OpenAPI docs
