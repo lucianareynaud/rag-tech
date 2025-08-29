@@ -174,11 +174,11 @@ pytest tests/ -v  # Unit tests with 80%+ coverage
 **Output:**
 ```json
 {
-  "answer": "The Z-123 blender has a 1.5L capacity jar...",
+  "answer": "The H-500 humidifier has a 4-liter water tank...",
   "sources": [
     {
-      "doc_id": "Z-123.md",
-      "text": "Blender Z-123 features: 1.5L BPA-free jar...",
+      "doc_id": "H-500.md",
+      "text": "Ultrasonic cool-mist humidifier with adjustable mist control...",
       "score": 0.847
     }
   ],
@@ -211,18 +211,18 @@ Start the server first:
 ./start.sh
 ```
 
-**Example 1: Product Capacity Query**
+**Example 1: Product Features Query**
 ```bash
 curl -X POST http://localhost:8000/query \
   -H 'Content-Type: application/json' \
-  -d '{"query": "What is the capacity of Z-123 blender jar?"}'
+  -d '{"query": "What are the features of H-500 humidifier?"}'
 ```
 
-**Example 2: Safety Features**
+**Example 2: Capacity Information**
 ```bash
 curl -X POST http://localhost:8000/query \
   -H 'Content-Type: application/json' \
-  -d '{"query": "Is Z-123 dishwasher safe?"}'
+  -d '{"query": "What is the water tank capacity of H-500?"}'
 ```
 
 **Example 3: Product Comparison**
@@ -253,11 +253,11 @@ curl http://localhost:8000/health
 **Expected Response Format:**
 ```json
 {
-  "answer": "The Z-123 blender has a 1.5L capacity jar made from BPA-free materials...",
+  "answer": "The H-500 humidifier has a 4-liter removable water tank and provides 12-hour continuous runtime...",
   "sources": [
     {
-      "doc_id": "Z-123.md",
-      "text": "Blender Z-123 features: 1.5L BPA-free jar...",
+      "doc_id": "H-500.md",
+      "text": "Ultrasonic cool-mist humidifier with adjustable mist control...",
       "score": 0.847
     }
   ],
@@ -302,7 +302,7 @@ docker inspect rag-tech | jq -r '.[0].Architecture'
 | Metric | Value | Context |
 |--------|-------|---------|
 | Model Load Time | 8.5s | Granite 3.1 MoE 1B via Ollama |
-| Index Build Time | 0.8s | 6 documents, 18 chunks |
+| Index Build Time | 0.8s | 6 documents, 6 chunks |
 | Query Latency (p50) | 28ms | Including LLM generation |
 | Query Latency (p95) | 85ms | Complex multi-doc queries |
 | Memory Usage | 2.1GB | Model + embeddings + runtime |

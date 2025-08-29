@@ -26,11 +26,6 @@ def chunk_text(text: str, chunk_size: int = 600, overlap: int = 80) -> List[str]
         i += max(1, chunk_size - overlap)
     return [c for c in out if c.strip()]
 
-def _l2_normalize(mat: np.ndarray) -> np.ndarray:
-    mat = mat.astype("float32", copy=False)
-    norms = np.linalg.norm(mat, axis=1, keepdims=True) + 1e-12
-    return mat / norms
-
 class _Embedder:
     def __init__(self, model_name: str):
         logger.info(f"Loading embedding model: {model_name}")

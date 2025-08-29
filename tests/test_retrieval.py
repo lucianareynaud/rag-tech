@@ -1,11 +1,11 @@
 from app.rag import Retriever
 from app.config import settings
 
-def test_topk_retrieval_blender():
+def test_topk_retrieval_product():
     r = Retriever(settings.EMBEDDING_MODEL, "storage", top_k=3)
-    hits = r.search("What is the jar capacity of the Z-123 blender?")
+    hits = r.search("What is the water tank capacity of the H-500?")
     assert len(hits) >= 1
-    assert any("Z-123" in h["doc_id"] for h in hits)
+    assert any("H-500" in h["doc_id"] for h in hits)
 
 def test_threshold_refusal_path():
     r = Retriever(settings.EMBEDDING_MODEL, "storage", top_k=3)

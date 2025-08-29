@@ -198,7 +198,7 @@ print(f'   LLM Status: ollama mode ready')
     echo ""
     echo "🔧 For developers:"
     echo "   📖 API Docs: http://localhost:$PORT/docs"
-    echo "   🧪 cURL: curl -X POST http://localhost:$PORT/query -H 'Content-Type: application/json' -d '{\"query\":\"Z-123 capacity?\"}'"
+    echo "   🧪 cURL: curl -X POST http://localhost:$PORT/query -H 'Content-Type: application/json' -d '{\"query\":\"H-500 features?\"}'"
     echo ""
     echo "🛠️  Troubleshooting:"
     echo "   If port conflict: pkill -f uvicorn && ./start.sh"

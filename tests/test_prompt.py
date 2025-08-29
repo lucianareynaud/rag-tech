@@ -3,11 +3,11 @@ from app.llm import LLM
 
 def test_prompt_contains_doc_ids_and_stub():
     contexts = [
-        {"doc_id":"Z-123.md","score":0.812,"text":"Z-123 blender has a 1.5L jar and 700W motor."},
-        {"doc_id":"common-specs.md","score":0.701,"text":"All jars are BPA-free and include safety lock."}
+        {"doc_id":"H-500.md","score":0.812,"text":"H-500 humidifier has a 4-liter water tank and 12-hour runtime."},
+        {"doc_id":"Blender-Common-Specs.md","score":0.701,"text":"All blenders are BPA-free and include safety lock."}
     ]
-    user_p = render_user_prompt("What is jar capacity?", contexts)
-    assert "doc_id=Z-123.md" in user_p
+    user_p = render_user_prompt("What is water tank capacity?", contexts)
+    assert "H-500.md" in user_p
     llm = LLM()  # stub by default
     out = llm.generate("system", user_p)
-    assert "Z-123.md" in out
+    assert "H-500.md" in out
