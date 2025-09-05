@@ -346,7 +346,6 @@ docker inspect rag-tech | jq -r '.[0].Architecture'
 - **Rate Limiting**: Configurable per-user quotas
 - **CORS**: Restricted origins for production deployments
 
-
 ## 📈 Future Enhancements
 
 ### Short Term
