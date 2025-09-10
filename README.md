@@ -4,7 +4,7 @@
 
 A sophisticated yet minimalist Retrieval-Augmented Generation system implementing a 2-agent LangGraph pipeline, purpose-built for product query scenarios. Features enterprise-grade engineering practices, 100% local deployment, and zero external dependencies in production.
 
-## 🚀 Quickstart
+## Quickstart
 
 ```bash
 # One command does everything:
@@ -12,18 +12,18 @@ A sophisticated yet minimalist Retrieval-Augmented Generation system implementin
 ```
 
 **That's it!** The script will:
-- ✅ Optimize for ARM64 (Apple Silicon native)
-- ✅ Clean up any port conflicts automatically
-- ✅ Setup Python environment
-- ✅ Start Ollama server
-- ✅ Download Granite 3.1 MoE 1B model (~1.4GB)
-- ✅ Build vector index with Sentence-Transformers
-- ✅ Launch RAG API at http://localhost:8000
-- ✅ Serve WhatsApp-style UI
+- Optimize for ARM64 (Apple Silicon native)
+- Clean up any port conflicts automatically
+- Setup Python environment
+- Start Ollama server
+- Download Granite 3.1 MoE 1B model (~1.4GB)
+- Build vector index with Sentence-Transformers
+- Launch RAG API at http://localhost:8000
+- Serve WhatsApp-style UI
 
 Open your browser to **http://localhost:8000** for the interactive chat interface.
 
-### 🛠️ Troubleshooting
+### Troubleshooting
 
 ```bash
 # Clean stop and restart:
@@ -36,32 +36,32 @@ pkill -f uvicorn && ./start.sh
 ./stop.sh
 ```
 
-## 🏗️ Architecture Overview
+## Architecture Overview
 
 This system implements a sophisticated multi-agent RAG pipeline following clean architecture principles:
 
 ```mermaid
 graph TB
     %% User Interface Layer
-    UI[🌐 WhatsApp-style Frontend<br/>Static HTML/CSS/JS]
-    API[🚀 FastAPI Server<br/>Pretty JSON + Static Files]
+    UI[WhatsApp-style Frontend<br/>Static HTML/CSS/JS]
+    API[FastAPI Server<br/>Pretty JSON + Static Files]
     
     %% Agent Pipeline Layer
-    Pipeline[🔄 LangGraph Pipeline]
-    RA[🔍 Retriever Agent<br/>Semantic Search]
-    RespA[🤖 Responder Agent<br/>Granite Generation]
+    Pipeline[LangGraph Pipeline]
+    RA[Retriever Agent<br/>Semantic Search]
+    RespA[Responder Agent<br/>Granite Generation]
     
     %% Core Services Layer
-    Retriever[📊 Retriever Service<br/>E5 Embeddings + NumPy Cosine]
-    LLM[🧠 LLM Service<br/>Pure Ollama Integration]
+    Retriever[Retriever Service<br/>E5 Embeddings + NumPy Cosine]
+    LLM[LLM Service<br/>Pure Ollama Integration]
     
     %% Data Layer
-    VectorStore[🗂️ Vector Store<br/>storage/index.npz]
-    MetaStore[📋 Metadata Store<br/>storage/meta.json]
-    Corpus[📚 Document Corpus<br/>data/products/]
+    VectorStore[Vector Store<br/>storage/index.npz]
+    MetaStore[Metadata Store<br/>storage/meta.json]
+    Corpus[Document Corpus<br/>data/products/]
     
     %% External Tools
-    Ollama[🦙 Ollama Server<br/>Granite 3.1 MoE 1B<br/>localhost:11434]
+    Ollama[Ollama Server<br/>Granite 3.1 MoE 1B<br/>localhost:11434]
     
     %% Flow connections
     UI --> API
@@ -92,7 +92,7 @@ graph TB
     class Ollama external
 ```
 
-## 🎯 Technical Approach & Rationale
+## Technical Approach & Rationale
 
 ### Multi-Agent Design Philosophy
 
@@ -160,7 +160,7 @@ pytest tests/ -v  # Unit tests with 80%+ coverage
 - **Graceful Shutdown**: Signal handling for clean container stops
 - **Resource Limits**: Configurable model and memory parameters
 
-## 📋 API Contract
+## API Contract
 
 ### POST /query
 **Input:**
@@ -197,7 +197,7 @@ pytest tests/ -v  # Unit tests with 80%+ coverage
 }
 ```
 
-## 🧪 Testing & Validation
+## Testing & Validation
 
 ### Unit Tests
 ```bash
@@ -269,7 +269,7 @@ curl http://localhost:8000/health
 }
 ```
 
-## 🔧 Development
+## Development
 
 ### Local Development
 ```bash
@@ -295,7 +295,7 @@ docker run -p 8000:8000 rag-tech
 docker inspect rag-tech | jq -r '.[0].Architecture'
 ```
 
-## 📊 Performance Benchmarks
+## Performance Benchmarks
 
 **Environment**: MacBook Air M2, 16GB RAM
 
@@ -308,7 +308,7 @@ docker inspect rag-tech | jq -r '.[0].Architecture'
 | Memory Usage | 2.1GB | Model + embeddings + runtime |
 | Throughput | 35 QPS | Single worker, no concurrency limits |
 
-## 🏛️ Design Patterns
+## Design Patterns
 
 ### 1. Repository Pattern
 - `Retriever` class abstracts vector storage
@@ -327,7 +327,7 @@ docker inspect rag-tech | jq -r '.[0].Architecture'
 - LangGraph agents as discrete commands
 - Pipeline orchestration with explicit state management
 
-## 🚦 Production Considerations
+## Production Considerations
 
 ### Scaling Strategy
 1. **Horizontal**: Load balance multiple FastAPI instances with shared Ollama backend
@@ -346,7 +346,7 @@ docker inspect rag-tech | jq -r '.[0].Architecture'
 - **Rate Limiting**: Configurable per-user quotas
 - **CORS**: Restricted origins for production deployments
 
-## 📈 Future Enhancements
+## Future Enhancements
 
 ### Short Term
 - [ ] Conversation memory for multi-turn dialogues
@@ -358,7 +358,7 @@ docker inspect rag-tech | jq -r '.[0].Architecture'
 - [ ] Federated search across multiple knowledge bases
 - [ ] Auto-scaling based on query volume
 
-## 📄 License
+## License
 
 All rights reserved. 
 
