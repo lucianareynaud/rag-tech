@@ -43,25 +43,25 @@ This system implements a sophisticated multi-agent RAG pipeline following clean 
 ```mermaid
 graph TB
     %% User Interface Layer
-    UI[WhatsApp-style Frontend<br/>Static HTML/CSS/JS]
-    API[FastAPI Server<br/>Pretty JSON + Static Files]
+    UI[🌐 WhatsApp-style Frontend<br/>Static HTML/CSS/JS]
+    API[🚀 FastAPI Server<br/>Pretty JSON + Static Files]
     
     %% Agent Pipeline Layer
-    Pipeline[LangGraph Pipeline]
-    RA[Retriever Agent<br/>Semantic Search]
-    RespA[Responder Agent<br/>Granite Generation]
+    Pipeline[🔄 LangGraph Pipeline]
+    RA[🔍 Retriever Agent<br/>Semantic Search]
+    RespA[🤖 Responder Agent<br/>Granite Generation]
     
     %% Core Services Layer
-    Retriever[Retriever Service<br/>E5 Embeddings + NumPy Cosine]
-    LLM[LLM Service<br/>Pure Ollama Integration]
+    Retriever[📊 Retriever Service<br/>E5 Embeddings + NumPy Cosine]
+    LLM[🧠 LLM Service<br/>Pure Ollama Integration]
     
     %% Data Layer
-    VectorStore[Vector Store<br/>storage/index.npz]
-    MetaStore[Metadata Store<br/>storage/meta.json]
-    Corpus[Document Corpus<br/>data/products/]
+    VectorStore[🗂️ Vector Store<br/>storage/index.npz]
+    MetaStore[📋 Metadata Store<br/>storage/meta.json]
+    Corpus[📚 Document Corpus<br/>data/products/]
     
     %% External Tools
-    Ollama[Ollama Server<br/>Granite 3.1 MoE 1B<br/>localhost:11434]
+    Ollama[🦙 Ollama Server<br/>Granite 3.1 MoE 1B<br/>localhost:11434]
     
     %% Flow connections
     UI --> API
