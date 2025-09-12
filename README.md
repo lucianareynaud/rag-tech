@@ -1,6 +1,6 @@
 # rag-tech
 
-**Production-Ready RAG Pipeline with Multi-Agent Architecture**
+**Production-Ready LangGraph RAG Pipeline with Multi-Agent Architecture**
 
 A sophisticated yet minimalist Retrieval-Augmented Generation system implementing a 2-agent LangGraph pipeline, purpose-built for product query scenarios. Features enterprise-grade engineering practices, 100% local deployment, and zero external dependencies in production.
 
